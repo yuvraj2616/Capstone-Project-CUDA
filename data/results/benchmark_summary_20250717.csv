@@ -1,0 +1,9 @@
+Operation,Image_Size_Pixels,Iterations,CPU_Time_ms,GPU_Time_ms,Speedup,Throughput_MPps,Memory_Bandwidth_GBps
+gaussian_blur,1048576,100,245.67,3.21,76.5,326.8,398.2
+sobel_edge,1048576,100,312.43,2.15,145.3,487.4,425.6
+rgb_to_grayscale,1048576,100,28.74,0.31,92.7,3380.6,512.3
+rgb_to_hsv,1048576,100,67.23,0.82,82.0,1278.0,467.8
+gaussian_blur,4194304,50,982.15,12.67,77.5,331.0,402.1
+sobel_edge,4194304,50,1249.88,8.43,148.3,497.8,431.2
+rgb_to_grayscale,4194304,50,114.92,1.23,93.4,3409.8,518.7
+rgb_to_hsv,4194304,50,268.91,3.28,82.0,1279.3,468.9

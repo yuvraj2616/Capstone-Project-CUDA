@@ -1,0 +1,55 @@
+# Windows Makefile for CUDA Image Processor
+# Use this when CMake is not available
+
+# CUDA and C++ settings
+NVCC = nvcc
+NVCC_FLAGS = -O3 --use_fast_math -std=c++17
+CUDA_ARCH = -arch=sm_50
+
+# Directories
+SRCDIR = src
+INCDIR = include
+OBJDIR = obj
+BINDIR = bin
+
+# Source files
+CUDA_SOURCES = $(SRCDIR)/cuda_kernels.cu
+CPP_SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/image_processor.cpp $(SRCDIR)/benchmark.cpp
+
+# Object files
+CUDA_OBJECTS = $(OBJDIR)/cuda_kernels.obj
+CPP_OBJECTS = $(OBJDIR)/main.obj $(OBJDIR)/image_processor.obj $(OBJDIR)/benchmark.obj
+
+# Target
+TARGET = $(BINDIR)/cuda_image_processor.exe
+
+# Default target
+all: directories $(TARGET)
+
+# Create directories
+directories:
+	@if not exist $(OBJDIR) mkdir $(OBJDIR)
+	@if not exist $(BINDIR) mkdir $(BINDIR)
+	@if not exist data mkdir data
+	@if not exist data\sample_images mkdir data\sample_images
+	@if not exist data\results mkdir data\results
+
+# Compile CUDA files
+$(OBJDIR)/cuda_kernels.obj: $(CUDA_SOURCES)
+	$(NVCC) $(NVCC_FLAGS) $(CUDA_ARCH) -I$(INCDIR) -c $(CUDA_SOURCES) -o $@
+
+# Compile and link everything (simplified approach)
+$(TARGET): $(CUDA_SOURCES) $(CPP_SOURCES)
+	$(NVCC) $(NVCC_FLAGS) $(CUDA_ARCH) -I$(INCDIR) $(CUDA_SOURCES) $(CPP_SOURCES) -o $@
+
+# Clean
+clean:
+	@if exist $(OBJDIR) rmdir /s /q $(OBJDIR)
+	@if exist $(BINDIR) rmdir /s /q $(BINDIR)
+
+# Test
+test: $(TARGET)
+	@echo Testing basic functionality...
+	@$(TARGET) --help
+
+.PHONY: all clean test directories
